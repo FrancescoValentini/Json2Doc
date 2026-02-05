@@ -27,7 +27,7 @@ func main() {
 	startTime := time.Now()
 	logger.Info("Starting %s v%s", APP_NAME, APP_VERSION)
 
-	// TODO: Main
+	processData(cfg, logger)
 
 	endTime := time.Since(startTime)
 	logger.Info("Elapsed Time: %s", endTime)
@@ -75,4 +75,30 @@ func (c *AppConfig) validate(logger *AppLogger) error {
 
 	logger.Debug("Configuration validation successful")
 	return nil
+}
+
+func processData(cfg *AppConfig, logger *AppLogger) {
+	// Read input JSON file
+	jsonData, err := readFile(cfg.InputFile, logger)
+	if err != nil {
+		logger.Fatal("Failed to read input file: %v", err)
+	}
+
+	// Read template file
+	templateData, err := readFile(cfg.TemplateFile, logger)
+	if err != nil {
+		logger.Fatal("Failed to read template file: %v", err)
+	}
+
+	// Render template
+	logger.Info("Rendering template")
+	result, err := renderTemplate(templateData, jsonData, logger)
+	if err != nil {
+		logger.Fatal("Template rendering failed: %v", err)
+	}
+
+	// Write output file
+	if err := writeFile(cfg.OutputFile, []byte(result), logger); err != nil {
+		logger.Fatal("Failed to write output file: %v", err)
+	}
 }
