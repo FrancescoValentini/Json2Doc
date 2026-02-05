@@ -19,6 +19,11 @@ func main() {
 
 	logger := NewLogger(cfg.LogDebug) // Instantiate the logger
 
+	// Validate configuration
+	if err := cfg.validate(logger); err != nil {
+		logger.Fatal("Configuration error: %v", err)
+	}
+
 	startTime := time.Now()
 	logger.Info("Starting %s v%s", APP_NAME, APP_VERSION)
 
@@ -52,4 +57,22 @@ func parseFlags() *AppConfig {
 
 	flag.Parse()
 	return cfg
+}
+
+// validate checks if the configuration is valid
+func (c *AppConfig) validate(logger *AppLogger) error {
+	logger.Debug("Validating configuration")
+
+	if c.InputFile == "" {
+		return fmt.Errorf("input file (-i) is required")
+	}
+	if c.TemplateFile == "" {
+		return fmt.Errorf("template file (-t) is required")
+	}
+	if c.OutputFile == "" {
+		return fmt.Errorf("output file (-o) is required")
+	}
+
+	logger.Debug("Configuration validation successful")
+	return nil
 }
