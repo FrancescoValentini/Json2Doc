@@ -1,5 +1,7 @@
 package main
 
+import "log"
+
 const (
 	// Application Details
 	APP_VERSION = "1.0.0"
@@ -11,6 +13,7 @@ const (
 	LOG_LEVEL_INFO  = "INFO"
 	LOG_LEVEL_WARN  = "WARN"
 	LOG_LEVEL_ERROR = "ERROR"
+	LOG_LEVEL_FATAL = "FATAL"
 )
 
 // AppConfig holds application configuration
@@ -20,4 +23,10 @@ type AppConfig struct {
 	OutputFile   string // Output file path
 	LogDebug     bool   // true if the logger is in debug mode
 	ShowVersion  bool   // The application only prints the version
+}
+
+// AppLogger provides structured logging
+type AppLogger struct {
+	logger  *log.Logger
+	verbose bool
 }
