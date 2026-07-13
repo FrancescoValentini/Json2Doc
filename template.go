@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"html/template"
+	"text/template"
 )
 
 // renderTemplate processes the template with JSON data
